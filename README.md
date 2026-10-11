@@ -1,1 +1,0 @@
-Dit bericht schrijf ik lokaal met python via CMD. Hopelijke overleeft het de transitie naar de server!
