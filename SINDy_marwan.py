@@ -3,7 +3,10 @@ import numpy as np
 
 def sindy(X, dt, threshold=0.1):
     #Main SINDy
-    pass
+    X_dot=afgeleide(X,dt)
+    Theta, names=veelterm_library(X)
+    Xi = stlsq(Theta, X_dot, threshold)
+    return Xi, names
 
 def afgeleide(X, dt):
     """
