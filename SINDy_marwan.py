@@ -53,16 +53,12 @@ def stlsq(Theta, X_dot, threshold=0.1, max_iter=10):
 
         for i in range(X_dot.shape[1]):#we behandelen ieder differntiaalvergelijking afzonderlijk
 
-            small = np.abs(Xi[:, i]) < threshold #we zeggen dat de small zijn de coefficienten kleiner dan onze threshold, np.abs om absolute waarden te krijgen 
-            Xi[small, i] = 0.0 #we stellen die smalls gelijk aan 0
-            active = ~small #We selecteren enkel de overblijvende termen als small=True dan verwijderen we ze en als active = True, behouden we de term, ~draait de Bolean waarde om
+            small = np.abs(Xi[:, i]) < threshold #we zeggen dat de small zijn de coefficienten kleiner dan onze threshold, np.abs om absolute waarden te krijgen , small is een lijst van bolean waarden bv [True, False, False, True]
+            Xi[small, i] = 0.0 #we stellen die smalls gelijk aan 0, dus voor elke coefficient geassocieerd met True /
+            active = ~small #We selecteren enkel de overblijvende termen als small=True dan verwijderen we ze en als active = True, behouden we de term, ~draait de Bolean waarde om, zoals erboven vinden we dus bv dat active [False, True , True, False]
 
-            if np.any(active):#we berekenen de coefficienten nu opnieuw, maar nu enkel met de overblijvende kandidaat library
-                Xi[active, i] = np.linalg.lstsq(
-                    Theta[:, active],
-                    X_dot[:, i],
-                    rcond=None
-                )[0]#dus opnieuw de least squares maar zonder de smalls
+            if np.any(active):#Als er nog termen overblijven np.any geeft True terug als er minstens een in de lijst True is .
+                Xi[active, i] = np.linalg.lstsq( Theta[:, active],X_dot[:, i],rcond=None)[0]#dus opnieuw de least squares maar zonder de smalls
 
     return Xi
 
